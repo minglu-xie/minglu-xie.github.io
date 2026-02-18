@@ -1,0 +1,242 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Configure jupyter notebook settings in Linux server to achieve remote access | Gridea</title>
+<link rel="shortcut icon" href="https://minglu-xie.github.io/favicon.ico?v=1771450846464">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://minglu-xie.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Configure jupyter notebook settings in Linux server to achieve remote access | Gridea - Atom Feed" href="https://minglu-xie.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="I am doing my master thesis in SciLife lab, Uppsala University. We have our own Linux Server in the lab. Usually you don..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://minglu-xie.github.io">
+  <img class="avatar" src="https://minglu-xie.github.io/images/avatar.png?v=1771450846464" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Configure jupyter notebook settings in Linux server to achieve remote access
+            </h2>
+            <div class="post-info">
+              <span>
+                2026-02-18
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>I am doing my master thesis in SciLife lab, Uppsala University. We have our own Linux Server in the lab. Usually you don't have the root access which will make it difficult to configure Bioinformatic analysis environment sometimes.</p>
+<p>Recently, my colleague asked me to configure my own Jupyter Notebook setting and install R and Python to achieve remote access from local. Here I installed R 4.2.0 and Python 3.11.0 for my Jupyter Notebook.</p>
+<p>Notice: I mainly use mamba instead of conda now. You can find how to use mamba here: https://mamba.readthedocs.io/en/latest/user_guide/mamba.html</p>
+<p>Prerequisites:</p>
+<ul>
+<li>Basic knowledge of Linux</li>
+<li>Basic knowledge of conda/mamba</li>
+</ul>
+<h2 id="setup">Setup</h2>
+<ol>
+<li>Create and activate a virtual environment (R420):</li>
+</ol>
+<pre><code class="language-bash">conda create --name r420
+conda activate r420
+mamba install -c conda-forge r-base=4.2.0
+mamba install python=3.11.0 -c conda-forge
+</code></pre>
+<ol>
+<li>Install Jupyter Notebook:</li>
+</ol>
+<pre><code class="language-bash">pip install notebook
+</code></pre>
+<p>To uninstall:</p>
+<pre><code class="language-bash">pip uninstall notebook
+</code></pre>
+<ol start="3">
+<li>Generate the Jupyter configuration file:</li>
+</ol>
+<pre><code class="language-bash">jupyter notebook --generate-config
+</code></pre>
+<ol start="4">
+<li>Set the password:</li>
+</ol>
+<pre><code class="language-bash">jupyter notebook password
+</code></pre>
+<ol start="5">
+<li>Edit the configuration file:</li>
+</ol>
+<pre><code class="language-bash">vim ~/.jupyter/jupyter_notebook_config.py
+</code></pre>
+<p>Add or modify the following lines:</p>
+<pre><code class="language-bash">c.NotebookApp.ip = '*'
+c.NotebookApp.open_browser = False
+c.NotebookApp.port = 8998
+c.NotebookApp.allow_remote_access = True
+</code></pre>
+<ol start="6">
+<li>Start Jupyter Notebook:</li>
+</ol>
+<pre><code class="language-bash">jupyter notebook
+</code></pre>
+<p>You can now access it from your local browser using the server IP address and the port you set.</p>
+<p>If you want it to keep running in the background:</p>
+<pre><code class="language-bash">nohup jupyter notebook &amp;
+</code></pre>
+<ol start="7">
+<li>Check available kernels:</li>
+</ol>
+<pre><code class="language-bash">jupyter kernelspec list
+</code></pre>
+<h2 id="install-r-kernel-in-jupyter-notebook">Install R Kernel in Jupyter Notebook</h2>
+<p>Normally you can install IRkernel inside the R console using install.packages(), but since I do not have root access, dependency errors occurred. Therefore, using mamba is recommended:</p>
+<pre><code class="language-bash">mamba search r-irkernel
+mamba install -c conda-forge r-irkernel=1.3.1
+</code></pre>
+<p>After installation, open R and run:</p>
+<pre><code class="language-r">IRkernel::installspec(name = &quot;R&quot;, displayname = &quot;R_4.2.0&quot;)
+</code></pre>
+<p>Check the Jupyter kernels again — you should now see both Python and R kernels available.</p>
+<p>Thank you for reading.</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#install-r-kernel-in-jupyter-notebook">Install R Kernel in Jupyter Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://minglu-xie.github.io/post/hello-gridea/">
+              <h3 class="post-title">
+                Hello Gridea
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://minglu-xie.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

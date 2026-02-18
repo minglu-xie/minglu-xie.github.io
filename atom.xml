@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://minglu-xie.github.io</id>
+    <title>Gridea</title>
+    <updated>2026-02-18T21:41:02.720Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://minglu-xie.github.io"/>
+    <link rel="self" href="https://minglu-xie.github.io/atom.xml"/>
+    <subtitle>温故而知新</subtitle>
+    <logo>https://minglu-xie.github.io/images/avatar.png</logo>
+    <icon>https://minglu-xie.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2026, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[Configure jupyter notebook settings in Linux server to achieve remote access]]></title>
+        <id>https://minglu-xie.github.io/post/configure-jupyter-notebook-settings-in-linux-server-to-achieve-remote-access/</id>
+        <link href="https://minglu-xie.github.io/post/configure-jupyter-notebook-settings-in-linux-server-to-achieve-remote-access/">
+        </link>
+        <updated>2026-02-18T07:35:23.000Z</updated>
+        <content type="html"><![CDATA[<p>I am doing my master thesis in SciLife lab, Uppsala University. We have our own Linux Server in the lab. Usually you don't have the root access which will make it difficult to configure Bioinformatic analysis environment sometimes.</p>
+<p>Recently, my colleague asked me to configure my own Jupyter Notebook setting and install R and Python to achieve remote access from local. Here I installed R 4.2.0 and Python 3.11.0 for my Jupyter Notebook.</p>
+<p>Notice: I mainly use mamba instead of conda now. You can find how to use mamba here: https://mamba.readthedocs.io/en/latest/user_guide/mamba.html</p>
+<p>Prerequisites:</p>
+<ul>
+<li>Basic knowledge of Linux</li>
+<li>Basic knowledge of conda/mamba</li>
+</ul>
+<h2 id="setup">Setup</h2>
+<ol>
+<li>Create and activate a virtual environment (R420):</li>
+</ol>
+<pre><code class="language-bash">conda create --name r420
+conda activate r420
+mamba install -c conda-forge r-base=4.2.0
+mamba install python=3.11.0 -c conda-forge
+</code></pre>
+<ol>
+<li>Install Jupyter Notebook:</li>
+</ol>
+<pre><code class="language-bash">pip install notebook
+</code></pre>
+<p>To uninstall:</p>
+<pre><code class="language-bash">pip uninstall notebook
+</code></pre>
+<ol start="3">
+<li>Generate the Jupyter configuration file:</li>
+</ol>
+<pre><code class="language-bash">jupyter notebook --generate-config
+</code></pre>
+<ol start="4">
+<li>Set the password:</li>
+</ol>
+<pre><code class="language-bash">jupyter notebook password
+</code></pre>
+<ol start="5">
+<li>Edit the configuration file:</li>
+</ol>
+<pre><code class="language-bash">vim ~/.jupyter/jupyter_notebook_config.py
+</code></pre>
+<p>Add or modify the following lines:</p>
+<pre><code class="language-bash">c.NotebookApp.ip = '*'
+c.NotebookApp.open_browser = False
+c.NotebookApp.port = 8998
+c.NotebookApp.allow_remote_access = True
+</code></pre>
+<ol start="6">
+<li>Start Jupyter Notebook:</li>
+</ol>
+<pre><code class="language-bash">jupyter notebook
+</code></pre>
+<p>You can now access it from your local browser using the server IP address and the port you set.</p>
+<p>If you want it to keep running in the background:</p>
+<pre><code class="language-bash">nohup jupyter notebook &amp;
+</code></pre>
+<ol start="7">
+<li>Check available kernels:</li>
+</ol>
+<pre><code class="language-bash">jupyter kernelspec list
+</code></pre>
+<h2 id="install-r-kernel-in-jupyter-notebook">Install R Kernel in Jupyter Notebook</h2>
+<p>Normally you can install IRkernel inside the R console using install.packages(), but since I do not have root access, dependency errors occurred. Therefore, using mamba is recommended:</p>
+<pre><code class="language-bash">mamba search r-irkernel
+mamba install -c conda-forge r-irkernel=1.3.1
+</code></pre>
+<p>After installation, open R and run:</p>
+<pre><code class="language-r">IRkernel::installspec(name = &quot;R&quot;, displayname = &quot;R_4.2.0&quot;)
+</code></pre>
+<p>Check the Jupyter kernels again — you should now see both Python and R kernels available.</p>
+<p>Thank you for reading.</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Hello Gridea]]></title>
+        <id>https://minglu-xie.github.io/post/hello-gridea/</id>
+        <link href="https://minglu-xie.github.io/post/hello-gridea/">
+        </link>
+        <updated>2018-12-11T16:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+<!-- more -->
+<p><a href="https://github.com/getgridea/gridea">Github</a><br>
+<a href="https://gridea.dev/">Gridea 主页</a><br>
+<a href="https://fehey.com/">示例网站</a></p>
+<h2 id="特性">特性👇</h2>
+<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
+<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
+<p>🏷️  你可以对文章进行标签分组</p>
+<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
+<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
+<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
+<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
+<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
+<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
+<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
+<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
+<p>未来，它一定会成为你离不开的伙伴</p>
+<p>尽情发挥你的才华吧！</p>
+<p>😘 Enjoy~</p>
+]]></content>
+    </entry>
+</feed>
